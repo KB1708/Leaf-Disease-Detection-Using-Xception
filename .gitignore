@@ -1,0 +1,5 @@
+# Ignore Training data
+training/data/
+
+# Ignore Virtual Environment
+myenv/
