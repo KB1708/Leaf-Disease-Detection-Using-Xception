@@ -3,3 +3,6 @@ training/data/
 
 # Ignore Virtual Environment
 myenv/
+
+# Ignore .keras files
+*.keras
