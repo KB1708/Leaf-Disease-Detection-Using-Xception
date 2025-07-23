@@ -1,0 +1,5 @@
+# For building, training, and evaluating the model
+tensorflow
+numpy
+matplotlib
+Pillow
