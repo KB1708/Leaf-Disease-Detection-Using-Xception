@@ -6,3 +6,8 @@ myenv/
 
 # Ignore .keras files
 *.keras
+
+# Ignore all __pycache__ directories
+__pycache__/
+
+*pyc
