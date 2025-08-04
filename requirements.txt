@@ -1,3 +1,8 @@
+tensorflow
+numpy
+matplotlib
+Pillow
+
 fastapi
 uvicorn[standard]
 tensorflow-cpu
