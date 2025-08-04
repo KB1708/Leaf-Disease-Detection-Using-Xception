@@ -3,14 +3,17 @@ import numpy as np
 import json
 from PIL import Image
 import io
+import os
+
+# --- Build reliable paths to model files ---
+# This ensures the paths work correctly in Vercel's environment.
+# os.path.dirname(__file__) gets the directory where this script is located.
+base_dir = os.path.dirname(__file__)
+MODEL_PATH = os.path.join(base_dir, 'models/leaf_disease_model.keras')
+CLASS_NAMES_PATH = os.path.join(base_dir, 'models/class_names.json')
 
 # --- Load Model and Class Names ---
-# These are loaded once when the application starts to be efficient.
-MODEL_PATH = '../models/leaf_disease_model.keras'
-CLASS_NAMES_PATH = '../models/class_names.json'
-
 model = tf.keras.models.load_model(MODEL_PATH)
-
 with open(CLASS_NAMES_PATH, 'r') as f:
     class_names = json.load(f)
 
@@ -39,7 +42,7 @@ def get_prediction(image_bytes: bytes):
     
     # Find the class with the highest probability
     predicted_index = np.argmax(predictions[0])
-    predicted_class = class_names[predicted_index]
+    predicted_class = class_names[str(predicted_index)] # Ensure index is a string for JSON lookup
     confidence = float(np.max(predictions[0]))
     
     return {
