@@ -1,6 +1,12 @@
 "use client"; // This is a client component, as it uses browser-only APIs and hooks
 
 import { useState, ChangeEvent } from 'react';
+import Image from "next/image";
+
+interface PredictionResult {
+  predicted_class: string;
+  confidence: number;
+}
 
 export default function Home() {
   // State for the selected file and its preview URL
@@ -8,7 +14,7 @@ export default function Home() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
   // State for the prediction result, loading status, and errors
-  const [prediction, setPrediction] = useState<any>(null);
+  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,7 +80,13 @@ export default function Home() {
         {previewUrl && (
           <div className="mb-6 text-center">
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Image Preview</h2>
-            <img src={previewUrl} alt="Image preview" className="mx-auto rounded-lg shadow-md max-h-60" />
+            <Image 
+              src={previewUrl} 
+              alt="Image preview" 
+              width={240} 
+              height={240} 
+              className="mx-auto rounded-lg shadow-md h-auto w-auto max-h-60" 
+              />
           </div>
         )}
 
