@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "frontend/api/**/*.py": {
+      "pythonVersion": "3.11"
+    }
+  }
+}
