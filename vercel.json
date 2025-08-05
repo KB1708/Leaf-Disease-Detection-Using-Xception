@@ -1,7 +1,11 @@
 {
-  "functions": {
-    "frontend/api/**/*.py": {
-      "pythonVersion": "3.11"
+  "builds": [
+    {
+      "src": "frontend/api/**/*.py",
+      "use": "@vercel/python",
+      "config": {
+        "pythonVersion": "3.11"
+      }
     }
-  }
+  ]
 }
