@@ -5,7 +5,7 @@ training/data/
 myenv/
 
 # Ignore .keras files
-#*.keras
+*.keras
 
 # Ignore all __pycache__ directories
 __pycache__/
