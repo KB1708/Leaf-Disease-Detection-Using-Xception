@@ -1,45 +1,48 @@
 # === Stage 1: Build the Next.js Frontend ===
-# Use the official Node.js image as a builder
+# This stage builds your frontend into an optimized package
+
 FROM node:18-alpine AS builder
 
-# Set the working directory for the frontend build
+# Set the working directory inside the build container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to leverage Docker layer caching
-COPY frontend/package*.json ./
+# Copy the frontend code into the container
+# The '.' after 'frontend/' is important
+COPY frontend/ .
 
-# Install frontend dependencies
+# Install dependencies and build the Next.js app for production
 RUN npm install
-
-# Copy the rest of the frontend source code
-COPY ./frontend .
-
-# Build the Next.js application for production
 RUN npm run build
 
 
-# === Stage 2: Setup the Python Backend and Final Image ===
-# Use an official Python runtime as a parent image
+# === Stage 2: Create the Final Production Image ===
+# This stage takes the built frontend and adds the Python backend
+
 FROM python:3.11-slim
 
-# Set the working directory in the container
+# Set the working directory in the final container
 WORKDIR /app
 
-# Install Python dependencies
+# Set the PORT environment variable that Vercel and Next.js use
+ENV PORT=3000
+
+# Copy the Python requirements file from your repo
 COPY frontend/requirements.txt .
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the built Next.js app from the 'builder' stage
+# Copy the essential built files from the 'builder' stage
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json .
+COPY --from=builder /app/next.config.js .
 
-# Copy the Python API code
+# Copy your Python API code into the final image
 COPY frontend/api ./api
 
-# Expose the port Next.js runs on
+# Expose the port the server will run on
 EXPOSE 3000
 
-# The command to start the Next.js production server
-# This server will also handle your /api routes automatically
+# The command to start the Next.js production server.
+# This server will handle both the frontend pages and the /api routes.
 CMD ["npm", "run", "start"]
